@@ -1,0 +1,42 @@
+(define (stream panda-tamp)
+  (:stream sample-pose
+    :inputs (?o ?r)
+    :domain (Stackable ?o ?r)
+    :outputs (?p)
+    :certified (and (Pose ?o ?p) (Supported ?o ?p ?r))
+  )
+  (:stream sample-grasp
+    :inputs (?a ?o)
+    :domain (and (Arm ?a) (Graspable ?o))
+    :outputs (?g)
+    :certified (Grasp ?a ?o ?g)
+  ) 
+  (:stream inverse-kinematics
+    :inputs (?a ?o ?p ?g)
+    :domain (and (Arm ?a) (Pose ?o ?p) (Grasp ?a ?o ?g))
+    :outputs (?q ?t)
+    :certified (and (Conf ?q) (Traj ?t) (Kin ?a ?o ?p ?g ?q ?t))
+  )
+  (:stream plan-free-motion
+    :inputs (?a ?q1 ?q2)
+    :domain (and (Arm ?a) (Conf ?q1) (Conf ?q2))
+    :outputs (?t)
+    :certified (and (Traj ?t) (FreeMotion ?a ?q1 ?q2 ?t))
+  )
+  (:stream plan-holding-motion
+    :inputs (?a ?q1 ?q2 ?o ?g)
+    :domain (and (Conf ?q1) (Conf ?q2) (Grasp ?a ?o ?g))
+    :outputs (?t)
+    :certified (and (Traj ?t) (HoldingMotion ?a ?q1 ?t ?q2 ?o ?g))
+  )
+  (:stream test-pose-cfree
+    :inputs (?o1 ?p1 ?o2 ?p2)
+    :domain (and (Pose ?o1 ?p1) (Pose ?o2 ?p2))
+    :certified (ObjCFreePose ?o1 ?p1 ?o2 ?p2)
+  )
+  (:stream test-traj-cfree
+    :inputs (?a ?t ?o ?p)
+    :domain (and (Arm ?a) (Traj ?t) (Pose ?o ?p))
+    :certified (ObjCFreeTraj ?a ?t ?o ?p)
+  )
+)
