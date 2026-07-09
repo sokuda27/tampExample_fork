@@ -1,43 +1,16 @@
-(define (stream block-stacking)
-  (:stream sample-pose-block
-    :inputs (?o1 ?o2 ?p2)
-    :domain (and (Block ?o1) (Block ?o2) (Pose ?o2 ?p2))
-    :outputs (?p1)
-    :certified (and (Pose ?o1 ?p1) (Supported ?o1 ?p1 ?o2 ?p2))
+(define (stream block-pushing)
+  ; Sample a stable pose for block ?o on the mat region ?s
+  (:stream sample-push-pose
+    :inputs (?o ?s)
+    :domain (and (Block ?o) (Region ?s))
+    :outputs (?p)
+    :certified (and (Pose ?o ?p) (Supported ?o ?p ?s))
   )
-  (:stream sample-pose-table
-    :inputs (?o1 ?o2 ?p2)
-    :domain (and (Block ?o1) (Table ?o2) (Pose ?o2 ?p2))
-    :outputs (?p1)
-    :certified (and (Pose ?o1 ?p1) (Supported ?o1 ?p1 ?o2 ?p2))
-  )
-  (:stream sample-grasp
-    :inputs (?a ?o)
-    :domain (and (Arm ?a) (Graspable ?o))
-    :outputs (?g)
-    :certified (Grasp ?o ?g)
-  ) 
-  (:stream inverse-kinematics
-    :inputs (?a ?o ?p ?g)
-    :domain (and (Arm ?a) (Pose ?o ?p) (Grasp ?o ?g))
-    :outputs (?q ?t)
-    :certified (and (Conf ?q) (Traj ?t) (Kin ?o ?p ?g ?q ?t))
-  )
-  (:stream plan-free-motion
-    :inputs (?a ?q1 ?q2)
-    :domain (and (Arm ?a) (Conf ?q1) (Conf ?q2))
+  ; Plan a straight-line push trajectory moving block ?o from ?p1 to ?p2
+  (:stream plan-push-motion
+    :inputs (?a ?o ?p1 ?p2)
+    :domain (and (Arm ?a) (Block ?o) (Pose ?o ?p1) (Pose ?o ?p2))
     :outputs (?t)
-    :certified (and (Traj ?t) (FreeMotion ?q1 ?t ?q2))
-  )
-  (:stream plan-holding-motion
-    :inputs (?a ?q1 ?q2 ?o ?g)
-    :domain (and (Arm ?a) (Conf ?q1) (Conf ?q2) (Grasp ?o ?g))
-    :outputs (?t)
-    :certified (and (Traj ?t) (HoldingMotion ?q1 ?t ?q2 ?o ?g))
-  )
-  (:stream test-traj-cfree
-    :inputs (?a ?t ?o ?p)
-    :domain (and (Arm ?a) (Traj ?t) (Pose ?o ?p))
-    :certified (ObjCFreeTraj ?a ?t ?o ?p)
+    :certified (PushMotion ?o ?p1 ?t ?p2)
   )
 )

@@ -1,0 +1,194 @@
+pybullet build time: Jan 29 2025 23:16:28
+Robot: panda0
+Movable: ['block_oblong3']
+Fixed: ['flat_terrain1', 'mat2']
+Init: [('CanMove',), ('Arm', panda0_arm), ('Conf', q456), ('AtConf', panda0_arm, q456), ('HandEmpty', panda0_arm), ('Pose', block_oblong, p648), ('AtPose', block_oblong, p648), ('Block', block_oblong), ('Stackable', block_oblong, flat_terrain1), ('Supported', block_oblong, p648, flat_terrain1), ('Stackable', block_oblong, mat2), ('Region', flat_terrain1), ('Region', mat2)]
+Goal: ('and', ('On', block_oblong, mat2))
+Streams: dict_keys(['sample-pose', 'sample-push', 'plan-free-motion', 'test-pose-cfree', 'test-traj-cfree'])
+Synthesizers: dict_keys(['sample-pose', 'sample-push', 'plan-free-motion', 'test-pose-cfree', 'test-traj-cfree'])
+Python 3.10.20 (main, Mar  3 2026, 09:24:47) [GCC 13.3.0]
+Type 'copyright', 'credits' or 'license' for more information
+IPython 8.39.0 -- An enhanced Interactive Python. Type '?' for help.
+
+In [1]: 
+Warning! All actions have no cost. Recommend setting unit_costs=True
+Streams: [sample-pose:('?o', '?r')->('?p',), plan-free-motion:('?a', '?q1', '?q2')->('?t',), sample-push:('?a', '?o', '?p1', '?p2')->('?t',)]
+Functions: []
+Negated: [test-pose-cfree:('?o1', '?p1', '?o2', '?p2')->(), test-traj-cfree:('?a', '?t', '?o', '?p')->()]
+Optimizers: []
+
+Iteration: 1 | Complexity: 0 | Skeletons: 0 | Skeleton Queue: 0 | Disabled: 0 | Evaluations: 13 | Eager Calls: 0 | Cost: inf | Search Time: 0.000 | Sample Time: 0.000 | Total Time: 0.000
+Attempt: 1 | Results: 0 | Depth: 0 | Success: False | Time: 0.001
+Stream plan (inf, 0, inf): None
+Action plan (inf, inf): None
+No plan: increasing complexity from 0 to 1
+
+Iteration: 2 | Complexity: 1 | Skeletons: 0 | Skeleton Queue: 0 | Disabled: 0 | Evaluations: 13 | Eager Calls: 0 | Cost: inf | Search Time: 0.002 | Sample Time: 0.000 | Total Time: 0.002
+Attempt: 1 | Results: 4 | Depth: 0 | Success: False | Time: 0.007
+Stream plan (inf, 0, inf): None
+Action plan (inf, inf): None
+No plan: increasing complexity from 1 to 2
+
+Iteration: 3 | Complexity: 2 | Skeletons: 0 | Skeleton Queue: 0 | Disabled: 0 | Evaluations: 13 | Eager Calls: 0 | Cost: inf | Search Time: 0.008 | Sample Time: 0.000 | Total Time: 0.008
+Attempt: 1 | Results: 7 | Depth: 1 | Success: False | Time: 0.009
+Attempt: 2 | Results: 12 | Depth: 0 | Success: True | Time: 0.019
+Stream plan (4, 4, 0.000): [sample-pose:(block_oblong, mat2)->(#p0), test-pose-cfree:(block_oblong, #p0, block_oblong, p648)->(), sample-push:(panda0_arm, block_oblong, p648, #p0)->(#t0), test-traj-cfree:(panda0_arm, #t0, block_oblong, p648)->()]
+Action plan (1, 0.000): [push(panda0_arm, block_oblong, p648, #p0, #t0)]
+iter=0, outs=1) sample-pose:(block_oblong, mat2)->[(p920)]
+iter=inf, outs=0) test-pose-cfree:(block_oblong, p920, block_oblong, p648)->[]
+Sampling for up to -0.001 seconds
+Sampling while complexity <= 2
+
+Iteration: 4 | Complexity: 2 | Skeletons: 1 | Skeleton Queue: 1 | Disabled: 0 | Evaluations: 16 | Eager Calls: 0 | Cost: inf | Search Time: 0.028 | Sample Time: 0.001 | Total Time: 0.028
+Attempt: 1 | Results: 11 | Depth: 1 | Success: False | Time: 0.010
+Attempt: 2 | Results: 11 | Depth: 0 | Success: True | Time: 0.020
+Stream plan (8, 7, 0.000): [sample-pose:(block_oblong, flat_terrain1)->(#p1), sample-push:(panda0_arm, block_oblong, p648, #p1)->(#t2), test-traj-cfree:(panda0_arm, #t2, block_oblong, p648)->(), test-pose-cfree:(block_oblong, #p1, block_oblong, p648)->(), sample-pose:(block_oblong, mat2)->(p920), test-pose-cfree:(block_oblong, p920, block_oblong, #p1)->(), sample-push:(panda0_arm, block_oblong, #p1, p920)->(#t1), test-traj-cfree:(panda0_arm, #t1, block_oblong, #p1)->()]
+Action plan (2, 0.000): [push(panda0_arm, block_oblong, p648, #p1, #t2), push(panda0_arm, block_oblong, #p1, p920, #t1)]
+iter=0, outs=1) sample-pose:(block_oblong, flat_terrain1)->[(p96)]
+---------------------------------------------------------------------------
+ValueError                                Traceback (most recent call last)
+File ~/research/main/tampExample/settings/oblong_push/run.py:126
+    121 stream_info = {'test-pose-cfree': StreamInfo(negate=True),
+    122                'test-traj-cfree': StreamInfo(negate=True)}
+    124 IPython.embed()
+--> 126 solution = solve_focused(pddlstream_problem, stream_info=stream_info, success_cost=numpy.inf)
+    127 print_solution(solution)
+    128 plan, cost, evaluations = solution
+
+File ~/research/pddlstream/pddlstream/algorithms/focused.py:231, in solve_abstract(problem, constraints, stream_info, replan_actions, unit_costs, success_cost, max_time, max_iterations, max_memory, initial_complexity, complexity_step, max_complexity, max_skeletons, search_sample_ratio, bind, max_failures, unit_efforts, max_effort, effort_weight, reorder, visualize, verbose, **search_kwargs)
+    227         skeleton_queue.new_skeleton(optimizer_plan, opt_plan, cost)
+    229     allocated_sample_time = (search_sample_ratio * store.search_time) - store.sample_time \
+    230         if len(skeleton_queue.skeletons) <= max_skeletons else INF
+--> 231     if skeleton_queue.process(stream_plan, opt_plan, cost, complexity_limit, allocated_sample_time) is INFEASIBLE:
+    232         break
+    234 ################
+
+File ~/research/pddlstream/pddlstream/algorithms/skeleton.py:436, in SkeletonQueue.process(self, stream_plan, action_plan, cost, complexity_limit, max_time, accelerate)
+    434 if is_plan(stream_plan):
+    435     self.new_skeleton(stream_plan, action_plan, cost)
+--> 436     self.greedily_process()
+    437 elif (stream_plan is INFEASIBLE) and not self.process_until_new():
+    438     # Move this after process_complexity
+    439     return INFEASIBLE
+
+File ~/research/pddlstream/pddlstream/algorithms/skeleton.py:355, in SkeletonQueue.greedily_process(self)
+    353     if not binding.is_greedy(): #priority.not_greedy:
+    354         break
+--> 355     num_new += self.process_root()
+    356 return num_new
+
+File ~/research/pddlstream/pddlstream/algorithms/skeleton.py:343, in SkeletonQueue.process_root(self)
+    341 def process_root(self):
+    342     _, binding = self.pop_binding()
+--> 343     readd, is_new = self._process_binding(binding)
+    344     if readd is not False:
+    345         self.push_binding(binding)
+
+File ~/research/pddlstream/pddlstream/algorithms/skeleton.py:332, in SkeletonQueue._process_binding(self, binding)
+    329 #if not is_instance_ready(self.evaluations, instance):
+    330 #    raise RuntimeError(instance)
+    331 if binding.up_to_date():
+--> 332     new_results, _ = process_instance(self.store, self.domain, instance, disable=self.disable)
+    333     is_new = bool(new_results)
+    334 for new_binding in binding.update_bindings():
+
+File ~/research/pddlstream/pddlstream/algorithms/disabled.py:60, in process_instance(store, domain, instance, disable)
+     58     return [], []
+     59 start_time = time.time()
+---> 60 new_results, new_facts = instance.next_results(verbose=store.verbose)
+     61 store.sample_time += elapsed_time(start_time)
+     63 evaluations = store.evaluations
+
+File ~/research/pddlstream/pddlstream/language/stream.py:308, in StreamInstance.next_results(self, verbose)
+    306 start_time = time.time()
+    307 start_history = len(self.history)
+--> 308 new_values, new_facts = self._next_outputs()
+    309 self._check_output_values(new_values)
+    310 self._check_wild_facts(new_facts)
+
+File ~/research/pddlstream/pddlstream/language/stream.py:283, in StreamInstance._next_outputs(self)
+    281 def _next_outputs(self):
+    282     # TODO: deprecate
+--> 283     self._create_generator()
+    284     # TODO: shuffle history
+    285     # TODO: return all test stream outputs at once
+    286     if self.num_calls == len(self.history):
+
+File ~/research/pddlstream/pddlstream/language/stream.py:272, in StreamInstance._create_generator(self)
+    270         self._generator = self.external.gen_fn(*input_values, fluents=self.get_fluent_values())
+    271     else:
+--> 272         self._generator = self.external.gen_fn(*input_values)
+    273 return self._generator
+
+File ~/research/pddlstream/pddlstream/language/generator.py:80, in from_list_fn.<locals>.<lambda>(*args, **kwargs)
+     78 def from_list_fn(list_fn):
+     79     #return lambda *args, **kwargs: iter([list_fn(*args, **kwargs)])
+---> 80     return lambda *args, **kwargs: BoundedGenerator(iter([list_fn(*args, **kwargs)]), max_calls=1)
+
+File ~/research/pddlstream/pddlstream/language/generator.py:85, in from_fn.<locals>.list_fn(*args, **kwargs)
+     84 def list_fn(*args, **kwargs):
+---> 85     outputs = fn(*args, **kwargs)
+     86     return [] if outputs is None else [outputs]
+
+File ~/research/main/tampExample/src/tampExample/primitives.py:202, in get_push_fn.<locals>.fn(arm, body, pose1, pose2)
+    200 approach_pos = ee_start_pos - push_dir * 0.5
+    201 approach_pose = (approach_pos, pose1.pose[1])
+--> 202 approach_conf = arm.ComputeIK(approach_pose)
+    203 if approach_conf is None:
+    204     if DEBUG_FAILURE: input('Push IK (approach) failed')
+
+File ~/research/pb_robot/src/pb_robot/panda.py:183, in Manipulator.ComputeIK(self, transform, seed_q, force_seed, max_distance)
+    175 '''Compute the inverse kinematics of a transform, with the option 
+    176 to bias towards a seed configuration. If no IK can be found with that
+    177 bias we attempt to find an IK without that bias
+    178 @param transform 4x4 desired pose of end effector
+    179 @param (optional) seed_q Configuration to bias the IK
+    180 @return Nx1 configuration if successful, else 'None' '''
+    182 #These function operate in transforms but the IK function operates in poses
+--> 183 pose = pb_robot.geometry.pose_from_tform(transform)
+    185 if seed_q is None:
+    186     q = next(ikfast_inverse_kinematics(self.__robot, self.ik_info, 
+    187                                        self.eeFrame, pose, max_time=0.05), None)
+
+File ~/research/pb_robot/src/pb_robot/geometry.py:109, in pose_from_tform(tform)
+    108 def pose_from_tform(tform):
+--> 109     return point_from_tform(tform), quat_from_matrix(matrix_from_tform(tform))
+
+File ~/research/pb_robot/src/pb_robot/geometry.py:93, in quat_from_matrix(mat)
+     91 def quat_from_matrix(mat):
+     92     matrix = np.eye(4)
+---> 93     matrix[:3, :3] = mat
+     94     return transformations.quaternion_from_matrix(matrix)
+
+ValueError: could not broadcast input array from shape (2,3) into shape (3,3)
+URDFDemo/BulletUrdfImporter.cpp,126]:
+
+b3Printf: No inertial data for link, using mass=1, localinertiadiagonal = 1,1,1, identity local inertial frame
+b3Printf: b3Warning[examples/Importers/ImportURDFDemo/BulletUrdfImporter.cpp,126]:
+
+b3Printf: panda_leftfinger
+b3Printf: b3Warning[examples/Importers/ImportURDFDemo/BulletUrdfImporter.cpp,126]:
+
+b3Printf: No inertial data for link, using mass=1, localinertiadiagonal = 1,1,1, identity local inertial frame
+b3Printf: b3Warning[examples/Importers/ImportURDFDemo/BulletUrdfImporter.cpp,126]:
+
+b3Printf: panda_rightfinger
+ven = Mesa
+ven = Mesa
+numActiveThreads = 0
+stopping threads
+Thread with taskId 0 exiting
+Thread TERMINATED
+destroy semaphore
+semaphore destroyed
+destroy main semaphore
+main semaphore destroyed
+finished
+numActiveThreads = 0
+btShutDownExampleBrowser stopping threads
+Thread with taskId 0 exiting
+Thread TERMINATED
+destroy semaphore
+semaphore destroyed
+destroy main semaphore
+main semaphore destroyed
